@@ -152,14 +152,19 @@
     </div>
 
     <div class="field">
-      <label>Course title (Course Code)</label>
-      <input id="course" type="text" value="Principles of Marketing - 212309">
+      <label>Course Title</label>
+      <input id="course_title" type="text" value="Principles of Marketing">
+    </div>
+
+    <div class="field">
+      <label>Course Code</label>
+      <input id="course_code" type="text" value="212309">
     </div>
 
     <div class="field">
       <label>Submitted by (format: Name / Roll / Dept / Session)</label>
-      <textarea id="submitted_by">Name: Md Abdullah Al Zabir
-Roll: 242511
+      <textarea id="submitted_by">Name: Mr.Siam
+Roll: 
 Department: Accounting
 Session: 24-25
 Honours 1st Year</textarea>
@@ -203,7 +208,7 @@ Bijoy smarani University College.</textarea>
       <div class="logo-row">
         <div class="logo-box" id="logoBox">
           <!-- default logo -->
-          <img id="logoImg" src="https://upload.wikimedia.org/wikipedia/bn/3/38/%E0%A6%AC%E0%A6%BF%E0%A6%9C%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A7%8D%E0%A6%AE%E0%A6%B0%E0%A6%A3%E0%A7%80_%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png" alt="" style="display:block;max-width:100%;max-height:100%;">
+          <img id="logoImg" crossorigin="anonymous" src="https://upload.wikimedia.org/wikipedia/bn/3/38/%E0%A6%AC%E0%A6%BF%E0%A6%9C%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A7%8D%E0%A6%AE%E0%A6%B0%E0%A6%A3%E0%A7%80_%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png" alt="" style="display:block;max-width:100%;max-height:100%;">
           <svg id="logoSVG" width="72" height="72" viewBox="0 0 64 64" style="display:none">
             <rect width="64" height="64" rx="6" fill="#eee"/>
             <text x="50%" y="54%" font-size="18" font-weight="700" text-anchor="middle" fill="#222">LOGO</text>
@@ -223,7 +228,7 @@ Bijoy smarani University College.</textarea>
         <div class="box" id="previewBy">
           <!-- submitted by -->
           <p><strong>Submitted by :-</strong></p>
-          <p id="previewByText">Name: Md Abdullah Al Zabir<br/>Roll: 242511<br/>Department: Accounting<br/>Session: 24-25<br/>Honours 1st Year</p>
+          <p id="previewByText">Name: Mr.Siam<br/>Roll: <br/>Department: Accounting<br/>Session: 24-25<br/>Honours 1st Year</p>
         </div>
 
         <div class="box" id="previewTo">
@@ -255,8 +260,9 @@ Bijoy smarani University College.</textarea>
   const schoolIn = document.getElementById('school');
   const deptIn = document.getElementById('dept');
   const titleIn = document.getElementById('title');
+  const courseTitleIn = document.getElementById('course_title');
+  const courseCodeIn = document.getElementById('course_code');
   const topicIn = document.getElementById('topic');
-  const courseIn = document.getElementById('course');
   const byIn = document.getElementById('submitted_by');
   const toIn = document.getElementById('submitted_to');
   const dateIn = document.getElementById('date');
@@ -290,7 +296,9 @@ Bijoy smarani University College.</textarea>
     previewDept.textContent = deptIn.value || ' ';
     previewTitle.textContent = titleIn.value || 'ASSIGNMENT';
     previewTopic.textContent = topicIn.value || ' ';
-    previewCourse.innerHTML = courseIn.value ? ('Course Title:- ' + courseIn.value) : '';
+    previewCourse.innerHTML =
+      'Course Title:- ' + (courseTitleIn.value || '') + '<br/>' +
+      'Course Code:- ' + (courseCodeIn.value || '');
     previewByText.innerHTML = byIn.value.replace(/\n/g,'<br/>');
     previewToText.innerHTML = toIn.value.replace(/\n/g,'<br/>');
     previewDate.textContent = 'Date of submission:- ' + (dateIn.value || '');
@@ -308,6 +316,7 @@ Bijoy smarani University College.</textarea>
     logoImg.src = url;
     logoImg.style.display = 'block';
     logoSVG.style.display = 'none';
+    // revoke objectURL later (optional): URL.revokeObjectURL(url) can't be called immediately
   });
 
   // Reset to defaults
@@ -316,7 +325,8 @@ Bijoy smarani University College.</textarea>
     deptIn.value = 'Department of Accounting';
     titleIn.value = 'ASSIGNMENT';
     topicIn.value = 'Marketing determines the quality of life.';
-    courseIn.value = 'Principles of Marketing - 212309';
+    courseTitleIn.value = 'Principles of Marketing';
+    courseCodeIn.value = '212309';
     byIn.value = `Name: Md Abdullah Al Zabir
 Roll: 242511
 Department: Accounting
@@ -328,6 +338,8 @@ Bijoy smarani University College.`;
     dateIn.value = '17 November, 2025';
     accentIn.value = '#ff7a00';
     logoInput.value = '';
+    // reset to default remote image (ensure crossOrigin is set)
+    logoImg.crossOrigin = 'anonymous';
     logoImg.src = "https://upload.wikimedia.org/wikipedia/bn/3/38/%E0%A6%AC%E0%A6%BF%E0%A6%9C%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A7%8D%E0%A6%AE%E0%A6%B0%E0%A6%A3%E0%A7%80_%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png";
     logoImg.style.display = 'block';
     logoSVG.style.display = 'none';
@@ -352,6 +364,7 @@ Bijoy smarani University College.`;
 
     outputArea.style.display = 'none';
 
+    // Ensure fonts & images have time to load — html2canvas will attempt anyway.
     html2canvas(card, opts).then(canvas => {
       const dataURL = canvas.toDataURL('image/png');
 
@@ -361,7 +374,8 @@ Bijoy smarani University College.`;
       outputArea.style.display = 'flex';
       resultImage.scrollIntoView({behavior:'smooth'});
     }).catch(err=>{
-      alert('Error creating image: ' + err.message);
+      alert('Error creating image: ' + (err && err.message ? err.message : err));
+      console.error(err);
     });
   });
 
@@ -374,4 +388,4 @@ Bijoy smarani University College.`;
   applyToPreview();
 </script>
 </body>
-      </html>
+</html>
