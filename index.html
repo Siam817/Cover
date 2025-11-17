@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Assignment Cover Generator</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ffffff;
+    --accent:#ff7a00;
+    --text:#111;
+    --muted:#555;
+    --card-w:900px;
+  }
+  body{
+    font-family: 'Poppins', sans-serif;
+    margin:20px;
+    background:#f3f4f6;
+    color:var(--text);
+  }
+
+  .app{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+
+  /* Controls */
+  .controls{
+    width:340px;
+    background:#fff;
+    padding:14px;
+    border-radius:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    height:fit-content;
+  }
+  .controls h3{margin:0 0 8px 0;font-size:18px}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .field input[type="text"],
+  .field input[type="date"],
+  .field select,
+  .field textarea{
+    width:100%;
+    padding:8px;
+    box-sizing:border-box;
+    border:1px solid #ddd;
+    border-radius:6px;
+    font-size:14px;
+  }
+  .field textarea{height:60px;resize:vertical;padding:8px}
+
+  .small{display:flex;gap:8px}
+  .small input{flex:1}
+
+  .btn{
+    display:inline-block;
+    padding:10px 14px;
+    background:#111;
+    color:#fff;
+    border-radius:8px;
+    cursor:pointer;
+    text-decoration:none;
+    border:none;
+  }
+  .btn.secondary{background:#4b5563}
+  .btn.ghost{background:transparent;color:#111;border:1px solid #ddd}
+
+  /* Card preview area */
+  .preview-wrap{
+    flex:1;
+    min-width:520px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+  }
+
+  .card{
+    width:var(--card-w);
+    background:var(--bg);
+    padding:28px;
+    box-sizing:border-box;
+    border-radius:6px;
+    border:2px solid #111;
+    position:relative;
+    color:var(--text);
+  }
+
+  .logo-row{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:6px}
+  .logo-box{width:90px;height:90px;border:2px solid #111;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff}
+  .logo-box img{max-width:100%;max-height:100%;}
+
+  .school{display:block;text-align:center;font-weight:700;font-size:24px;margin-bottom:4px}
+  .dept{display:block;text-align:center;color:#b91c1c;font-weight:700;margin-bottom:6px}
+  .assignment{font-size:54px;text-align:center;color:var(--accent);font-weight:900;margin:6px 0}
+  .topic{font-size:24px;text-align:center;color:#b91c1c;margin-bottom:12px;font-weight:600}
+
+  .meta{font-size:16px;margin:6px 0}
+  .two-col{display:flex;gap:16px;margin-top:14px}
+  .box{flex:1;border:2px solid #111;padding:12px;box-sizing:border-box;border-radius:6px;background:#fff}
+  .box p{margin:6px 0;font-size:15px}
+
+  .date-line{text-align:center;margin-top:16px;border-top:1px solid #ddd;padding-top:12px;font-size:16px}
+
+  /* image output area */
+  .output{width:var(--card-w);display:flex;gap:8px;flex-direction:column;align-items:center}
+  .generated-img{max-width:100%;border:1px solid #ddd}
+
+  /* responsive */
+  @media (max-width:980px){
+    .app{flex-direction:column;align-items:center}
+    .controls{width:100%}
+    .preview-wrap{min-width:100%}
+  }
+</style>
+</head>
+<body>
+
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+  <h2 style="margin:0">Assignment Cover Generator</h2>
+  <div style="color:#555;font-size:14px">শুধু ফিল্ডগুলো এডিট করুন → Generate → Download</div>
+</div>
+
+<div class="app">
+  <!-- CONTROLS -->
+  <div class="controls">
+    <h3>Cover Settings</h3>
+
+    <div class="field">
+      <label>College / Header text</label>
+      <input id="school" type="text" value="Bijoy Smarani University College">
+    </div>
+
+    <div class="field">
+      <label>Department</label>
+      <input id="dept" type="text" value="Department of Accounting">
+    </div>
+
+    <div class="field">
+      <label>Big Title</label>
+      <input id="title" type="text" value="ASSIGNMENT">
+    </div>
+
+    <div class="field">
+      <label>Topic / Subtitle</label>
+      <input id="topic" type="text" value="Marketing determines the quality of life.">
+    </div>
+
+    <div class="field">
+      <label>Course title (Course Code)</label>
+      <input id="course" type="text" value="Principles of Marketing - 212309">
+    </div>
+
+    <div class="field">
+      <label>Submitted by (format: Name / Roll / Dept / Session)</label>
+      <textarea id="submitted_by">Name: Md Abdullah Al Zabir
+Roll: 242511
+Department: Accounting
+Session: 24-25
+Honours 1st Year</textarea>
+    </div>
+
+    <div class="field">
+      <label>Submitted to</label>
+      <textarea id="submitted_to">Rahima Akter
+Marketing Lecturer
+Bijoy smarani University College.</textarea>
+    </div>
+
+    <div class="field small">
+      <div style="flex:1">
+        <label>Date of submission</label>
+        <input id="date" type="text" value="17 November, 2025">
+      </div>
+      <div style="width:88px">
+        <label>Accent color</label>
+        <input id="accent" type="color" value="#ff7a00" style="width:100%;height:38px;padding:2px">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Upload logo (top)</label>
+      <input id="logo_input" type="file" accept="image/*">
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn" id="applyBtn">Apply to Preview</button>
+      <button class="btn secondary" id="generateBtn">Generate Image</button>
+      <button class="btn ghost" id="resetBtn">Reset</button>
+    </div>
+
+    <p style="margin-top:10px;color:#666;font-size:13px">Tip: Edit fields then press <strong>Apply to Preview</strong> before Generate if you want to see changes immediately.</p>
+  </div>
+
+  <!-- PREVIEW / OUTPUT -->
+  <div class="preview-wrap">
+    <div id="card" class="card" style="--accent:#ff7a00">
+      <div class="logo-row">
+        <div class="logo-box" id="logoBox">
+          <!-- default logo -->
+          <img id="logoImg" src="https://upload.wikimedia.org/wikipedia/bn/3/38/%E0%A6%AC%E0%A6%BF%E0%A6%9C%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A7%8D%E0%A6%AE%E0%A6%B0%E0%A6%A3%E0%A7%80_%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png" alt="" style="display:block;max-width:100%;max-height:100%;">
+          <svg id="logoSVG" width="72" height="72" viewBox="0 0 64 64" style="display:none">
+            <rect width="64" height="64" rx="6" fill="#eee"/>
+            <text x="50%" y="54%" font-size="18" font-weight="700" text-anchor="middle" fill="#222">LOGO</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="school" id="previewSchool">Bijoy Smarani University College</div>
+      <div class="dept" id="previewDept">Department of Accounting</div>
+      <div class="assignment" id="previewTitle" style="color:var(--accent)">ASSIGNMENT</div>
+
+      <div class="topic" id="previewTopic">Marketing determines the quality of life.</div>
+
+      <div class="meta" id="previewCourse">Course Title:- Principles of Marketing<br/>Course Code:- 212309</div>
+
+      <div class="two-col">
+        <div class="box" id="previewBy">
+          <!-- submitted by -->
+          <p><strong>Submitted by :-</strong></p>
+          <p id="previewByText">Name: Md Abdullah Al Zabir<br/>Roll: 242511<br/>Department: Accounting<br/>Session: 24-25<br/>Honours 1st Year</p>
+        </div>
+
+        <div class="box" id="previewTo">
+          <p><strong>Submitted to :-</strong></p>
+          <p id="previewToText">Rahima Akter<br/>Marketing Lecturer<br/>Bijoy smarani University College.</p>
+        </div>
+      </div>
+
+      <div class="date-line" id="previewDate">Date of submission:- 17 November, 2025</div>
+    </div>
+
+    <!-- result / image -->
+    <div class="output" id="outputArea" style="display:none">
+      <h4 style="margin:8px 0 6px 0">Generated Image</h4>
+      <img id="resultImage" class="generated-img" alt="Generated result">
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <a id="downloadLink" class="btn" href="#" download="assignment_cover.png">Download</a>
+        <button id="newGenerate" class="btn secondary">Generate Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- html2canvas CDN -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+  // DOM refs
+  const schoolIn = document.getElementById('school');
+  const deptIn = document.getElementById('dept');
+  const titleIn = document.getElementById('title');
+  const topicIn = document.getElementById('topic');
+  const courseIn = document.getElementById('course');
+  const byIn = document.getElementById('submitted_by');
+  const toIn = document.getElementById('submitted_to');
+  const dateIn = document.getElementById('date');
+  const accentIn = document.getElementById('accent');
+  const logoInput = document.getElementById('logo_input');
+
+  const previewSchool = document.getElementById('previewSchool');
+  const previewDept = document.getElementById('previewDept');
+  const previewTitle = document.getElementById('previewTitle');
+  const previewTopic = document.getElementById('previewTopic');
+  const previewCourse = document.getElementById('previewCourse');
+  const previewByText = document.getElementById('previewByText');
+  const previewToText = document.getElementById('previewToText');
+  const previewDate = document.getElementById('previewDate');
+  const card = document.getElementById('card');
+  const logoImg = document.getElementById('logoImg');
+  const logoSVG = document.getElementById('logoSVG');
+
+  const applyBtn = document.getElementById('applyBtn');
+  const generateBtn = document.getElementById('generateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const outputArea = document.getElementById('outputArea');
+  const resultImage = document.getElementById('resultImage');
+  const downloadLink = document.getElementById('downloadLink');
+  const newGenerate = document.getElementById('newGenerate');
+
+  // apply preview
+  function applyToPreview(){
+    previewSchool.textContent = schoolIn.value || ' ';
+    previewDept.textContent = deptIn.value || ' ';
+    previewTitle.textContent = titleIn.value || 'ASSIGNMENT';
+    previewTopic.textContent = topicIn.value || ' ';
+    previewCourse.innerHTML = courseIn.value ? ('Course Title:- ' + courseIn.value) : '';
+    previewByText.innerHTML = byIn.value.replace(/\n/g,'<br/>');
+    previewToText.innerHTML = toIn.value.replace(/\n/g,'<br/>');
+    previewDate.textContent = 'Date of submission:- ' + (dateIn.value || '');
+    card.style.setProperty('--accent', accentIn.value);
+    previewTitle.style.color = accentIn.value;
+  }
+
+  applyBtn.addEventListener('click', applyToPreview);
+
+  // logo upload
+  logoInput.addEventListener('change', async (e)=>{
+    const f = e.target.files[0];
+    if(!f) return;
+    const url = URL.createObjectURL(f);
+    logoImg.src = url;
+    logoImg.style.display = 'block';
+    logoSVG.style.display = 'none';
+  });
+
+  // Reset to defaults
+  resetBtn.addEventListener('click', ()=>{
+    schoolIn.value = 'Bijoy Smarani University College';
+    deptIn.value = 'Department of Accounting';
+    titleIn.value = 'ASSIGNMENT';
+    topicIn.value = 'Marketing determines the quality of life.';
+    courseIn.value = 'Principles of Marketing - 212309';
+    byIn.value = `Name: Md Abdullah Al Zabir
+Roll: 242511
+Department: Accounting
+Session: 24-25
+Honours 1st Year`;
+    toIn.value = `Rahima Akter
+Marketing Lecturer
+Bijoy smarani University College.`;
+    dateIn.value = '17 November, 2025';
+    accentIn.value = '#ff7a00';
+    logoInput.value = '';
+    logoImg.src = "https://upload.wikimedia.org/wikipedia/bn/3/38/%E0%A6%AC%E0%A6%BF%E0%A6%9C%E0%A6%AF%E0%A6%BC_%E0%A6%B8%E0%A7%8D%E0%A6%AE%E0%A6%B0%E0%A6%A3%E0%A7%80_%E0%A6%95%E0%A6%B2%E0%A7%87%E0%A6%9C%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.png";
+    logoImg.style.display = 'block';
+    logoSVG.style.display = 'none';
+    applyToPreview();
+  });
+
+  // Generate image
+  generateBtn.addEventListener('click', async ()=>{
+    // apply latest
+    applyToPreview();
+
+    // temporarily scale card for crispness
+    const scale = 2;
+
+    const opts = {
+      scale: scale,
+      useCORS: true,
+      logging:false,
+      backgroundColor: null,
+      allowTaint: true
+    };
+
+    outputArea.style.display = 'none';
+
+    html2canvas(card, opts).then(canvas => {
+      const dataURL = canvas.toDataURL('image/png');
+
+      resultImage.src = dataURL;
+      downloadLink.href = dataURL;
+      downloadLink.download = `assignment_cover.png`;
+      outputArea.style.display = 'flex';
+      resultImage.scrollIntoView({behavior:'smooth'});
+    }).catch(err=>{
+      alert('Error creating image: ' + err.message);
+    });
+  });
+
+  newGenerate.addEventListener('click', ()=>{
+    outputArea.style.display = 'none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  // initial apply
+  applyToPreview();
+</script>
+</body>
+      </html>
